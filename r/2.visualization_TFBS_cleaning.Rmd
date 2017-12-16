@@ -1,0 +1,69 @@
+---
+title: "TFBS Cleaning"
+author: "Ciera Martinez"
+date: "July 10, 2017"
+output: pdf_document
+---
+
+**Purpose**: The purpose is to prototype 
+1. what type of analysis I can do with the data set I have created. 
+2. see what else in terms of information / data I need to collect.
+
+### Set up 
+```{r}
+## Libraries
+library(ggplot2)
+library(grid)
+library(dplyr)
+library(reshape2)
+library(cowplot)
+library(ggplot2)
+library(dplyr)
+library(stringr)
+```
+
+## TFBS_df
+
+Read in and clean up all TFBS found 
+```{r}
+TFBS_df_0 <- read.csv("../data/output/TFBS_map_DF_augusto_test.csv", sep = "\t")
+
+# So not to have to read in again
+TFBS_df <- TFBS_df_0
+TFBS_df <- TFBS_df[,-1]
+
+colnames(TFBS_df) <- c("position", "score",	"seq_len",	"sequence", "raw_position",	"strand",	"align_position", "motif")
+
+## Make prettier for graphs ahead of time
+TFBS_df$strand <- gsub("positive", "positive strand", TFBS_df$strand)
+TFBS_df$strand <- gsub("negative", "negative strand", TFBS_df$strand)
+
+## Check
+head(TFBS_df)
+dim(TFBS_df)
+str(TFBS_df)
+summary(TFBS_df)
+```
+
+## Subset based on score
+```{r}
+
+plot(TFBS_df$score)
+TFBS_sub <- subset(TFBS_df, score >  2.2)
+```
+
+Random Plot
+
+```{r}
+
+## alignment mapping plot 
+head(TFBS_sub)
+ggplot(TFBS_sub, aes(align_position, sequence, color = strand, size = score)) +
+    geom_point(alpha = .2) +
+    geom_point(alpha = .4) +
+    theme_bw() +
+    theme(text = element_text(size = 17),
+          axis.text.y = element_blank()) +
+     labs(x = "") +
+     guides(colour = guide_legend(override.aes = list(size = 10)))
+```
