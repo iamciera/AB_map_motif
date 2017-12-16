@@ -29,3 +29,5 @@ Output data frame includes:
 ## 2.visualization_TFBS_cleaning.Rmd
 
 In R folder, a Rstudio markdown document which does a basic visuaization. 
+
+![plot](./img/example_image.png)
